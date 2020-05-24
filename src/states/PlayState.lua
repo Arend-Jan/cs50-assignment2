@@ -22,7 +22,6 @@ PlayState = Class{__includes = BaseState}
 ]]
 function PlayState:enter(params)
     self.paddle = params.paddle
-    self.powerup = params.powerup
     self.bricks = params.bricks
     self.health = params.health
     self.score = params.score
@@ -54,7 +53,6 @@ function PlayState:update(dt)
     -- update positions based on velocity
     self.paddle:update(dt)
     self.ball:update(dt)
-    self.powerup:update(dt)
 
     if self.ball:collides(self.paddle) then
         -- raise ball above paddle in case it goes below it, then reverse dy
@@ -74,10 +72,6 @@ function PlayState:update(dt)
             self.ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - self.ball.x))
         end
 
-        gSounds['paddle-hit']:play()
-    end
-
-    if self.powerup:collides(self.paddle) then
         gSounds['paddle-hit']:play()
     end
 
@@ -184,7 +178,6 @@ function PlayState:update(dt)
             gStateMachine:change('serve', {
                 paddle = self.paddle,
                 bricks = self.bricks,
-                powerup = self.powerup,
                 health = self.health,
                 score = self.score,
                 highScores = self.highScores,
@@ -217,7 +210,6 @@ function PlayState:render()
 
     self.paddle:render()
     self.ball:render()
-    self.powerup.render()
 
     renderScore(self.score)
     renderHealth(self.health)
